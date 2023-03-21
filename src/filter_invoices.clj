@@ -1,4 +1,7 @@
-(def invoice (clojure.edn/read-string (slurp "invoice.edn")))
+(ns filter-invoices
+  (:require [clojure.edn :as edn]))
+
+(def invoice (edn/read-string (slurp "E:\\Data\\alex\\Dev\\clojure-challenge\\invoice.edn")))
 
 (defn filter-invoice-items [invoice]
       (->> invoice
@@ -7,8 +10,7 @@
                        (or (some #(= 19 (:tax/rate %)) (:taxable/taxes param1))
                            (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))
            (filter (fn [param1]
-                       (not (some #(= 19 (:tax/rate %)) (:taxable/taxes param1))
-                            (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))))
+                       (get (some #(= 19 (:tax/rate %)) (:taxable/taxes param1)) not (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))))
 
 
 (filter-invoice-items invoice)
