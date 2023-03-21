@@ -1,6 +1,7 @@
 (ns invoice-spec
   (:require
-    [clojure.spec.alpha :as s] ))
+   [clojure.spec.alpha :as s]
+   [clojure.data.json :as json]))
 
 (s/def :customer/name string?)
 (s/def :customer/email string?)
@@ -30,3 +31,10 @@
   (s/keys :req [:invoice/issue-date
                 :invoice/customer
                 :invoice/items]))
+
+(defn validate-json-invoice [filename]
+  (let [json-data (json/read-str (slurp filename))
+        valid? (s/valid? ::invoice json-data)]
+    valid?))
+
+(validate-json-invoice "E:\\Data\\alex\\Dev\\clojure-challenge\\invoice.json")
