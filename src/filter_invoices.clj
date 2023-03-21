@@ -10,10 +10,12 @@
                        (or (some #(= 19 (:tax/rate %)) (:taxable/taxes param1))
                            (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))
            (filter (fn [param1]
-                       (get (some #(= 19 (:tax/rate %)) (:taxable/taxes param1)) not (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))))
+                       (not= (some #(= 19 (:tax/rate %)) (:taxable/taxes param1))
+                           (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))))
 
 
-(filter-invoice-items invoice)
+(let [invoices (filter-invoice-items invoice)]
+  (print invoices))
 
 ;; {:invoice-item/id  "ii3"
 ;;                  :invoice-item/sku "SKU 3"
