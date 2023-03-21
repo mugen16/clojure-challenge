@@ -16,3 +16,9 @@
 
 (deftest test-subtotal-with-price-of-zero
   (is (= 0.0 (ii/subtotal {:precise-quantity 2 :precise-price 0.0}))))
+
+(deftest test-subtotal-with-zero-quantity
+  (is (= 0 (ii/subtotal {:precise-quantity 0, :precise-price 100}))))
+
+(deftest test-subtotal-with-zero-quantity-and-price
+  (is (= 0 (ii/subtotal {:precise-quantity 0, :precise-price 0}))))
