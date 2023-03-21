@@ -10,3 +10,4 @@
     :or                {discount-rate 0}}]
   (* precise-price precise-quantity (discount-factor item)))
 
+;; (subtotal {:precise-quantity 10.0 :precise-price 100.0})
