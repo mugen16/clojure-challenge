@@ -3,20 +3,22 @@
 
 (def invoice (edn/read-string (slurp "E:\\Data\\alex\\Dev\\clojure-challenge\\invoice.edn")))
 
+(defn tax-iva? [param]
+  (some #(= 19 (:tax/rate %)) (:taxable/taxes param)))
+
+(defn retention-rate? [param]
+  (some #(= 1 (:retention/rate %)) (:retentionable/retentions param)))
+
 (defn filter-invoice-items [invoice]
-      (->> invoice
-           :invoice/items
-           (filter (fn [param1]
-                       (or (some #(= 19 (:tax/rate %)) (:taxable/taxes param1))
-                           (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))
-           (filter (fn [param1]
-                       (not= (some #(= 19 (:tax/rate %)) (:taxable/taxes param1))
-                           (some #(= 1 (:retention/rate %)) (:retentionable/retentions param1)))))))
+  (->> invoice
+       :invoice/items
+       (filter #(or (tax-iva? %) (retention-rate? %)))
+       (filter #(not= (tax-iva? %) (retention-rate? %)))))
 
+(let [result (filter-invoice-items invoice)]
+  (print result))
 
-(let [invoices (filter-invoice-items invoice)]
-  (print invoices))
-
+;; Expected result
 ;; {:invoice-item/id  "ii3"
 ;;                  :invoice-item/sku "SKU 3"
 ;;                 :taxable/taxes    [{:tax/id       "t3"
